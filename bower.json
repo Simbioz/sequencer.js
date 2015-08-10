@@ -1,0 +1,23 @@
+{
+  "name": "sequencer.js",
+  "main": "sequencer.js",
+  "version": "1.0.0",
+  "authors": [
+    "Simbioz <dev@simbioz.com>"
+  ],
+  "description": "A simple but powerful task sequencer.",
+  "keywords": [
+    "operation",
+    "sequence",
+    "delay"
+  ],
+  "license": "MIT",
+  "homepage": "http://www.simbioz.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
