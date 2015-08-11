@@ -10,6 +10,10 @@ var WaitTask = function (duration) {
     this.perform = function (handle) { setTimeout(handle.release, duration); };
 };
 
+var WaitForHandleTask = function (action) {
+    this.perform = function (handle) { action(handle); };
+};
+
 var Sequencer = function () {
     var self = this;
     var processing = false;
@@ -52,9 +56,14 @@ var Sequencer = function () {
         push(new ActionTask(action));
         return this;
     };
-
+    
     this.doWait = function (duration) {
         push(new WaitTask(duration));
+        return this;
+    };
+    
+    this.doWaitForHandle = function(action) {
+        push(new WaitForHandleTask(action));
         return this;
     };
 };
