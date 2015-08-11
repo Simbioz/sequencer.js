@@ -1,6 +1,6 @@
 # sequencer.js
 
-A simple but powerful task sequencer.
+A simple but powerful and *extensible* task sequencer.
 
 # Installation
 
@@ -42,3 +42,26 @@ sequencer.do(function () { console.log("4th after jquery.transit transition is c
     gulp
     
 3. Require `build/sequencer.min.js` in an html file.
+
+# Creating an Extension
+
+A sequencer.js extension looks like this:
+
+```javascript
+var DoSomethingTask = function (someValue) {
+    this.perform = function (handle) {
+        // Do something, synchronously or asynchronously
+        console.log("My sequencer.js extension task performed!");
+        
+        // Then release the handle to indicate that the task is complete:
+        handle.release();
+    };
+};
+
+Sequencer.prototype.doSomething = function (someValue) {
+    this.push(new DoSomethingTask(someValue));
+    return this;
+}
+```
+
+Take a look at core and third-party extensions in the sequencer.js source for concrete examples.
