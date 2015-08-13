@@ -35,11 +35,11 @@ sequencer.do(function () { console.log("4th after jquery.transit transition is c
 
 1. Install development dependencies:
 
-    npm install
+    `npm install`
     
 2. Build the latest version:
 
-    gulp
+    `gulp`
     
 3. Require `build/sequencer.min.js` in an html file.
 
