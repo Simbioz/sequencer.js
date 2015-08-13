@@ -1,5 +1,10 @@
 var Handle = function (onRelease) {
-    this.release = function() { onRelease(); };
+    var self = this;
+    this.isReleased = false;
+    this.release = function() {
+        self.isReleased = true;
+        onRelease();
+    };
 }
 var Sequencer = function () {
     var processing = false;
@@ -35,27 +40,43 @@ var Sequencer = function () {
     }
 };
 
-var ActionTask = function (action) {
+var DoTask = function (action) {
     this.perform = function (handle) { action(); handle.release(); };
 };
 
 Sequencer.prototype.do = function (action) {
-    this.push(new ActionTask(action));
+    this.push(new DoTask(action));
     return this;
 };
-var WaitTask = function (duration) {
+var DoWaitTask = function (duration) {
     this.perform = function (handle) { setTimeout(handle.release, duration); };
 };
 
 Sequencer.prototype.doWait = function (duration) {
-    this.push(new WaitTask(duration));
+    this.push(new DoWaitTask(duration));
     return this;
 };
-var WaitForHandleTask = function (action) {
+var DoWaitForHandleTask = function (handle) {
+    function waitForHandleRelease(handle) {
+        if (handle.isReleased) return;
+        setTimeout(function () { waitForHandleRelease(handle); }, 50);
+    }
+    
+    this.perform = function (sequencer_handle) {
+        waitForHandleRelease(handle);
+        sequencer_handle.release();
+    };
+};
+
+Sequencer.prototype.doWait = function (handle) {
+    this.push(new DoWaitForHandleTask(handle));
+    return this;
+};
+var DoWithHandleTask = function (action) {
     this.perform = function (handle) { action(handle); };
 };
 
-Sequencer.prototype.doWaitForHandle = function(action) {
-    this.push(new WaitForHandleTask(action));
+Sequencer.prototype.doWithHandle = function(action) {
+    this.push(new DoWithHandleTask(action));
     return this;
 };
