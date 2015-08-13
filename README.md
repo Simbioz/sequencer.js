@@ -33,14 +33,8 @@ sequencer.do(function () { console.log("4th after jquery.transit transition is c
 
 # Development
 
-1. Install development dependencies:
-
-    `npm install`
-    
-2. Build the latest version:
-
-    `gulp`
-    
+1. Install development dependencies using `npm install`
+2. Build the latest version by running `gulp` (default task)
 3. Require `build/sequencer.min.js` in an html file.
 
 # Creating an Extension
