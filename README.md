@@ -57,7 +57,7 @@ A sequencer.js extension looks like this:
 var DoSomethingTask = function (someValue) {
     this.perform = function (handle) {
         // Do something, synchronously or asynchronously
-        console.log("My sequencer.js extension task performed!");
+        console.log("My sequencer.js extension task performed with value " + someValue);
         
         // Then release the handle to indicate that the task is complete:
         handle.release();
