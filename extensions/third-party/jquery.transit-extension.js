@@ -1,4 +1,4 @@
-var TransitionTask = function (jqueryElement, transition) {
+var DoTransitionTask = function (jqueryElement, transition) {
     this.perform = function (handle) {
         transition.complete = handle.release;
         jqueryElement.transition(transition);
@@ -6,6 +6,6 @@ var TransitionTask = function (jqueryElement, transition) {
 };
 
 Sequencer.prototype.doTransition = function (jqueryElement, transition) {
-    this.push(new TransitionTask(jqueryElement, transition));
+    this.push(new DoTransitionTask(jqueryElement, transition));
     return this;
 }
