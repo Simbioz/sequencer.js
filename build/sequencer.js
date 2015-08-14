@@ -1,9 +1,19 @@
 var Handle = function (onRelease) {
     var self = this;
+    var onReleaseHandlers = [];
+    
+    if (!(typeof onRelease === "undefined"))
+        onReleaseHandlers.push(onRelease);
+    
     this.isReleased = false;
+    
+    this.addOnReleaseHandler = function(handler) {
+        onReleaseHandlers.push(handler);
+    };
+    
     this.release = function() {
         self.isReleased = true;
-        onRelease();
+        onReleaseHandlers.forEach(function (handler) { handler(); });
     };
 }
 var Sequencer = function () {
@@ -57,18 +67,16 @@ Sequencer.prototype.doWait = function (duration) {
     return this;
 };
 var DoWaitForHandleTask = function (handle) {
-    function waitForHandleRelease(handle) {
-        if (handle.isReleased) return;
-        setTimeout(function () { waitForHandleRelease(handle); }, 50);
-    }
-    
     this.perform = function (sequencer_handle) {
-        waitForHandleRelease(handle);
-        sequencer_handle.release();
+        if (handle.isReleased) {
+            sequencer_handle.release();
+            return;
+        }
+        handle.addOnReleaseHandler(sequencer_handle.release);
     };
 };
 
-Sequencer.prototype.doWait = function (handle) {
+Sequencer.prototype.doWaitForHandle = function (handle) {
     this.push(new DoWaitForHandleTask(handle));
     return this;
 };
