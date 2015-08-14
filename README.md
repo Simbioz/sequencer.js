@@ -29,6 +29,18 @@ sequencer.doTransition($(".animated"), { scale: 2, duration: 2000 });
 
 // Continues only after the transition is complete
 sequencer.do(function () { console.log("4th after jquery.transit transition is complete"); });
+
+// Create a handle and wait until some asynchronous code releases it
+var blockUntilLaterHandle = new Handle();
+sequencer.doWaitForHandle(blockUntilLaterHandle);
+
+// This will run after the external handle is released
+sequencer.do(function () { console.log("5th after waiting for an external handle to be released"); });
+
+// Release the handle sometime later so that the sequence can continue.
+// Note that a long delay is used here because enqueueing tasks in the sequencer
+// is an instantaneous operation; this line runs almost instantly at page load!
+setTimeout(blockUntilLaterHandle.release, 15000);
 ```
 
 # Development
