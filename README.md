@@ -18,8 +18,8 @@ sequencer.do(function () { console.log("1st"); });
 // This also demonstrates "do" task chaining.
 sequencer.doWait(1000).do(function () { console.log("2nd after 1 second"); });
 
-// Waits until the provided handle is released
-sequencer.doWaitForHandle(function (handle) { setTimeout(handle.release, 3000); });
+// Performs an action and waits until the given handle is released
+sequencer.doWithHandle(function (handle) { setTimeout(handle.release, 3000); });
 
 // Another simple synchronous action
 sequencer.do(function () { console.log("3rd after waiting for handle for 3 seconds"); });
