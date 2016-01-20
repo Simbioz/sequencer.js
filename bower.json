@@ -5,7 +5,7 @@
   "authors": [
     "Simbioz <dev@simbioz.com>"
   ],
-  "description": "A simple but powerful and extensible task sequencer.",
+  "description": "A simple but powerful and extensible JavaScript task sequencer.",
   "keywords": [
     "operation",
     "sequence",

@@ -1,6 +1,6 @@
 # sequencer.js
 
-A simple but powerful and *extensible* task sequencer.
+A simple but powerful and *extensible* JavaScript task sequencer.
 
 # Installation
 
@@ -25,7 +25,7 @@ sequencer.doWithHandle(function (handle) { setTimeout(handle.release, 3000); });
 sequencer.do(function () { console.log("3rd after waiting for handle for 3 seconds"); });
 
 // A jquery.transit transition (optional jquery.transit-extension)
-sequencer.doTransition($(".animated"), { scale: 2, duration: 2000 });
+sequencer.doTransit($(".animated"), { scale: 2, duration: 2000 });
 
 // Continues only after the transition is complete
 sequencer.do(function () { console.log("4th after jquery.transit transition is complete"); });
