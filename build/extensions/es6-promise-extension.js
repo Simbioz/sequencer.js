@@ -1,3 +1,5 @@
+// Requires an ES6 promises polyfill such as "es6-promise"
+
 var DoWaitForPromiseTask = function (promise, onFulfilled, onRejected) {
     this.perform = function (handle) {
         promise.then(function (value) {
