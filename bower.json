@@ -13,7 +13,7 @@
     "delay"
   ],
   "license": "MIT",
-  "homepage": "http://www.simbioz.com",
+  "homepage": "https://github.com/Simbioz/sequencer.js",
   "ignore": [
     "**/.*",
     "node_modules",
