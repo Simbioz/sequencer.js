@@ -4,7 +4,13 @@ A simple but powerful and *extensible* JavaScript task sequencer.
 
 # Installation
 
+## Using Bower
+
     bower install sequencer.js
+
+## Using NPM
+
+    npm install sequencer.js
 
 # Usage
 
@@ -34,7 +40,7 @@ sequencer.do(function () { console.log("4th after jquery.transit transition is c
 var blockUntilLaterHandle = new Handle();
 sequencer.doWaitForHandle(blockUntilLaterHandle);
 
-// This will wait for the promise to be fulfilled (requires a promise polyfill such as es6-promise)
+// Wait for the promise to be fulfilled (optional es6-promise-extension)
 // You can optionally obtain the promise's value or rejection reason
 var url = "https://cors-test.appspot.com/test";
 sequencer.doWaitForPromise(fetch(url), function (response) {
