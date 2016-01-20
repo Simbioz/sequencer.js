@@ -1,11 +1,13 @@
-var DoTransitionTask = function (jqueryElement, transition) {
+// Requires jquery.transit
+
+var DoTransitTask = function (jqueryElement, transit) {
     this.perform = function (handle) {
-        transition.complete = handle.release;
-        jqueryElement.transition(transition);
+        transit.complete = handle.release;
+        jqueryElement.transition(transit);
     };
 };
 
-Sequencer.prototype.doTransition = function (jqueryElement, transition) {
-    this.push(new DoTransitionTask(jqueryElement, transition));
+Sequencer.prototype.doTransit = function (jqueryElement, transit) {
+    this.push(new DoTransitTask(jqueryElement, transit));
     return this;
 }
