@@ -34,6 +34,13 @@ sequencer.do(function () { console.log("4th after jquery.transit transition is c
 var blockUntilLaterHandle = new Handle();
 sequencer.doWaitForHandle(blockUntilLaterHandle);
 
+// This will wait for the promise to be fulfilled (requires a promise polyfill such as es6-promise)
+// You can optionally obtain the promise's value or rejection reason
+var url = "https://cors-test.appspot.com/test";
+sequencer.doWaitForPromise(fetch(url), function (response) {
+    console.log("Received HTTP " + response.status + " from " + url);
+});
+
 // This will run after the external handle is released
 sequencer.do(function () { console.log("5th after waiting for an external handle to be released"); });
 
