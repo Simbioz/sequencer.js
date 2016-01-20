@@ -3,7 +3,8 @@
   "main": "sequencer.js",
   "version": "2.0.0",
   "authors": [
-    "Simbioz <dev@simbioz.com>"
+    "Simbioz <dev@simbioz.com>",
+    "Michaël Fortin <fortinmike@irradiated.net>"
   ],
   "description": "A simple but powerful and extensible JavaScript task sequencer.",
   "keywords": [

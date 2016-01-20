@@ -1,4 +1,13 @@
 {
+  "name": "sequencer.js",
+  "version": "2.0.0",
+  "description": "A simple but powerful and extensible JavaScript task sequencer",
+  "homepage": "https://github.com/Simbioz/sequencer.js",
+  "author": ["Simbioz <dev@simbioz.com>"],
+  "contributors": [{
+    "name": "Michaël Fortin",
+    "email": "fortinmike@irradiated.net" 
+  }],
   "dependencies": {},
   "devDependencies": {
     "bower": "^1.4.1",
