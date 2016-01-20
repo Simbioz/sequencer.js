@@ -41,7 +41,7 @@ var blockUntilLaterHandle = new Handle();
 sequencer.doWaitForHandle(blockUntilLaterHandle);
 
 // Wait for the promise to be fulfilled (optional es6-promise-extension)
-// You can optionally obtain the promise's value or rejection reason
+// You can optionally obtain the promise's value and/or rejection reason
 var url = "https://cors-test.appspot.com/test";
 sequencer.doWaitForPromise(fetch(url), function (response) {
     console.log("Received HTTP " + response.status + " from " + url);
