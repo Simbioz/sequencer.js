@@ -23,7 +23,7 @@ var Sequencer = function () {
     this.push = function (task) {
         sequence.push(task);
         resumeProcessing();
-    }
+    };
     
     function resumeProcessing() {
         if (processing) return;

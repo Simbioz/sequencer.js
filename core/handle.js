@@ -15,4 +15,4 @@ var Handle = function (onRelease) {
         self.isReleased = true;
         onReleaseHandlers.forEach(function (handler) { handler(); });
     };
-}
+};
