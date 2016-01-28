@@ -12,6 +12,7 @@ var Handle = function (onRelease) {
     };
     
     this.release = function() {
+        if (self.isReleased) return;
         self.isReleased = true;
         onReleaseHandlers.forEach(function (handler) { handler(); });
     };
