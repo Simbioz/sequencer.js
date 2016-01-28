@@ -1,14 +1,17 @@
-var DoWaitForHandleTask = function (handle) {
-    this.perform = function (sequencer_handle) {
-        if (handle.isReleased) {
-            sequencer_handle.release();
+var DoWaitForHandleTask = function (handleToWaitFor) {
+    this.perform = function (handle) {
+        if (handleToWaitFor.isReleased) {
+            handle.release();
             return;
         }
-        handle.addOnReleaseHandler(sequencer_handle.release);
+        handleToWaitFor.addOnReleaseHandler(handle.release);
     };
+    this.cancel = function (handle) {
+        handle.release();
+    }
 };
 
-Sequencer.prototype.doWaitForHandle = function (handle) {
-    this.push(new DoWaitForHandleTask(handle));
+Sequencer.prototype.doWaitForHandle = function (handleToWaitFor) {
+    this.push(new DoWaitForHandleTask(handleToWaitFor));
     return this;
 };

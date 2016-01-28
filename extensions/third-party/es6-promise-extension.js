@@ -10,6 +10,13 @@ var DoWaitForPromiseTask = function (promise, onFulfilled, onRejected) {
             handle.release();
         });
     };
+    this.cancel = function (handle) {
+        // Allows monkey-patching an ES6 promise with a cancel function that will
+        // automatically be invoked by the sequencer when it cancels this task.
+        // Details: http://stackoverflow.com/a/25346945/167983
+        if (typeof(promise.cancel) !== "undefined") promise.cancel();
+        handle.release();
+    };
 };
 
 Sequencer.prototype.doWaitForPromise = function (promise, onFulfilled, onRejected) {

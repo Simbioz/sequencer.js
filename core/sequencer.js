@@ -1,11 +1,20 @@
 var Sequencer = function () {
-    var processing = false;
     var sequence = [];
+    var currentTask = null;
+    var currentHandle = null;
+    var processing = false;
     
     this.push = function (task) {
         sequence.push(task);
         resumeProcessing();
-    }
+    };
+    
+    this.clear = function () {
+        sequence = [];
+        if (currentTask !== null && typeof(currentTask.cancel) !== "undefined") {
+            currentTask.cancel(currentHandle);
+        }
+    };
     
     function resumeProcessing() {
         if (processing) return;
@@ -23,11 +32,17 @@ var Sequencer = function () {
         if (finishProcessing()) return;
         
         // When the handle is released, we'll process the next task
-        var handle = new Handle(process);
+        var handle = new Handle(function () {
+            currentTask = null;
+            currentHandle = null;
+            process();
+        });
         
         // Perform the next task, providing it with the handle it can
         // release to signify that its job is done
         var task = sequence.shift();
+        currentTask = task;
+        currentHandle = handle;
         task.perform(handle);
     }
 };
