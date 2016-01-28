@@ -23,4 +23,6 @@ gulp.task('extensions', function () {
         .pipe(gulp.dest(BUILD_EXTENSIONS_DIR)); // Output minified js
 });
 
-gulp.task('default', ['core', 'extensions']);
+gulp.task('build', ['core', 'extensions']);
+
+gulp.task('default', ['build']);

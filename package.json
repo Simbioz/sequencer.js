@@ -1,6 +1,6 @@
 {
   "name": "sequencer.js",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A simple but powerful and extensible JavaScript task sequencer",
   "homepage": "https://github.com/Simbioz/sequencer.js",
   "author": ["Simbioz <dev@simbioz.com>"],
