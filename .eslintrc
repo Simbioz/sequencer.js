@@ -1,0 +1,37 @@
+{
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "shared-node-browser": true,
+    "es6": true // Implicitly enables es6 support in parserOptions (above)
+  },
+  "plugins": [
+    "react"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    "semi": ["warn", "always"],
+    "block-spacing": ["warn", "always"],
+    "no-console": "error", // Using the console can cause total mayhem when it isn't available!
+    "no-unused-vars": ["warn", { "vars": "all", "args": "none" }],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }], // Can cause confusion and was removed by some recent languages such as Swift
+    "no-multiple-empty-lines": ["warn", { "max": 1 }], // For cleanliness
+    "no-var": "error", // "var" escapes the scope it's defined in, which can cause duplicate definition issues
+    "object-shorthand": ["error", "never"], // Renaming variables when using object literal shorthand syntax can introduce unexpected subtle failures because the keys in the objects are changed too!
+    "object-curly-spacing": ["warn", "always"],
+    "operator-assignment": ["warn", "always"],
+    "spaced-comment": ["warn", "always"],
+    "capitalized-comments": ["warn", "always", { "ignoreConsecutiveComments": true }],
+    "comma-spacing": "warn",
+    "eqeqeq": "error", // It's recommended to use === to avoid subtle errors
+    "quotes": ["warn", "double", { "allowTemplateLiterals": true }]
+  }
+}
