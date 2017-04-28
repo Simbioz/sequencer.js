@@ -3,8 +3,8 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
-var BUILD_DIR = 'build/';
-var BUILD_EXTENSIONS_DIR = 'build/extensions';
+var BUILD_DIR = 'dist';
+var BUILD_EXTENSIONS_DIR = BUILD_DIR + '/extensions';
 
 gulp.task('core', function () {
     return gulp.src(["core/*.js", "extensions/core/*.js"])
@@ -16,7 +16,7 @@ gulp.task('core', function () {
 });
 
 gulp.task('extensions', function () {
-    return gulp.src(["extensions/third-party/*.js"])
+    return gulp.src(["extensions/vendor/*.js"])
         .pipe(gulp.dest(BUILD_EXTENSIONS_DIR)) // Output non-minified js
         .pipe(uglify())
         .pipe(rename({ extname: ".min.js"}))
