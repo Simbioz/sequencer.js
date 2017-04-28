@@ -10,12 +10,8 @@
     "shared-node-browser": true,
     "es6": true // Implicitly enables es6 support in parserOptions (above)
   },
-  "plugins": [
-    "react"
-  ],
   "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
+    "eslint:recommended"
   ],
   "rules": {
     "semi": ["warn", "always"],
