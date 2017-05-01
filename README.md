@@ -50,12 +50,6 @@ sequencer.do(function () { console.log("5th after waiting for an external handle
 setTimeout(blockUntilLaterHandle.release, 15000);
 ```
 
-# Development
-
-1. Install development dependencies using `npm install`
-2. Build the latest version by running `gulp` (default task)
-3. Require `build/sequencer.min.js` in an html file.
-
 # Creating an Extension
 
 A sequencer.js extension looks like this:
