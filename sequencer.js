@@ -1,4 +1,1 @@
-module.exports = {
-  Sequencer: require("scripts/sequencer"),
-  Handle: require("scripts/handle")
-};
+module.exports = require("scripts/sequencer.js");

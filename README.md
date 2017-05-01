@@ -30,18 +30,12 @@ sequencer.doWithHandle(function (handle) { setTimeout(handle.release, 3000); });
 // Another simple synchronous action
 sequencer.do(function () { console.log("3rd after waiting for handle for 3 seconds"); });
 
-// A jquery.transit transition (optional jquery.transit-extension)
-sequencer.doTransit($(".animated"), { scale: 2, duration: 2000 });
-
-// Continues only after the transition is complete
-sequencer.do(function () { console.log("4th after jquery.transit transition is complete"); });
-
 // Create a handle and wait until some asynchronous code releases it
 var blockUntilLaterHandle = new Handle();
 sequencer.doWaitForHandle(blockUntilLaterHandle);
 
-// Wait for the promise to be fulfilled (optional es6-promise-extension)
-// You can optionally obtain the promise's value and/or rejection reason
+// Wait for the promise to be fulfilled.
+// You can optionally obtain the promise's value and/or rejection reason.
 var url = "https://cors-test.appspot.com/test";
 sequencer.doWaitForPromise(fetch(url), function (response) {
     console.log("Received HTTP " + response.status + " from " + url);

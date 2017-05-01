@@ -9,7 +9,7 @@ let DoWithHandleTask = function (action) {
 
 module.exports = {
   extend: function (sequencerPrototype) {
-    sequencerPrototype.prototype.doWithHandle = function (action) {
+    sequencerPrototype.doWithHandle = function (action) {
       this.push(new DoWithHandleTask(action));
       return this;
     };

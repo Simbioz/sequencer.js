@@ -7,7 +7,7 @@ let BUILD_DIR = "dist";
 let webpackConfig = require("./webpack.config.js");
 
 gulp.task("build", function () {
-    return gulp.src(ENTRY_POINT)
+  return gulp.src(ENTRY_POINT)
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest(BUILD_DIR));
 });

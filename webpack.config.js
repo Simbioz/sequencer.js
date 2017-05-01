@@ -16,7 +16,8 @@ let config = {
     ]
   },
   output: {
-    filename: "sequencer.js"
+    filename: "sequencer.js",
+    libraryTarget: "commonjs2"
   }
 };
 
