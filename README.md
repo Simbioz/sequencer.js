@@ -4,17 +4,15 @@ A simple but powerful and *extensible* JavaScript task sequencer.
 
 # Installation
 
-## Using Bower
-
-    bower install sequencer.js
-
 ## Using NPM
 
-    npm install sequencer.js
+    npm install --save sequencer.js
 
 # Usage
 
-```javascript    
+```javascript
+var Sequencer = require("sequencer.js");
+
 var sequencer = new Sequencer();
 
 // Enqueue a simple synchronous action
@@ -52,7 +50,7 @@ setTimeout(blockUntilLaterHandle.release, 15000);
 
 # Creating an Extension
 
-A sequencer.js extension looks like this:
+An external sequencer.js extension looks like this:
 
 ```javascript
 var DoSomethingTask = function (someValue) {
@@ -71,4 +69,6 @@ Sequencer.prototype.doSomething = function (someValue) {
 }
 ```
 
-Take a look at core and third-party extensions in the sequencer.js source for concrete examples.
+Take a look at core extensions in the sequencer.js source for concrete examples. The way the
+extensions are installed is slightly different from external extensions, but they still
+serve as appropriate examples.
