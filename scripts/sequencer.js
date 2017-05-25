@@ -53,7 +53,8 @@ require("./extensions/do-extension").extend(Sequencer.prototype);
 require("./extensions/do-wait-extension").extend(Sequencer.prototype);
 require("./extensions/do-wait-for-handle-extension").extend(Sequencer.prototype);
 require("./extensions/do-wait-for-promise-extension").extend(Sequencer.prototype);
-require("./extensions/do-with-handle-extension").extend(Sequencer.prototype);
+require("./extensions/do-wait-for-release-extension").extend(Sequencer.prototype);
+require("./extensions/do-wait-for-releases-extension").extend(Sequencer.prototype);
 
 Sequencer.Handle = Handle; // Expose the Handle type in the API
 

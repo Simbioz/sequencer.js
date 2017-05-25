@@ -11,41 +11,47 @@ A simple but powerful and *extensible* JavaScript task sequencer.
 # Usage
 
 ```javascript
-var Sequencer = require("sequencer.js");
+// Create a handle and release it after some time has passed.
+// The sequence will block at `doWaitForHandle(blockUntilLaterHandle)` until the handle is released.
+var blockUntilLaterHandle = new Handle();
+setTimeout(blockUntilLaterHandle.release, 10000);
 
 var sequencer = new Sequencer();
 
-// Enqueue a simple synchronous action
-sequencer.do(function () { console.log("1st"); });
+// Enqueues a simple synchronous action
+sequencer.do(function () { log("1st instantly"); });
 
 // Waits for one second then performs an action after the delay has elapsed.
-// This also demonstrates "do" task chaining.
-sequencer.doWait(1000).do(function () { console.log("2nd after 1 second"); });
+// This also demonstrates `do` task chaining.
+sequencer.doWait(1000).do(function () { log("2nd after 1 second"); });
 
-// Performs an action and waits until the given handle is released
-sequencer.doWithHandle(function (handle) { setTimeout(handle.release, 3000); });
+// Performs an action and waits until release() is called
+sequencer.doWaitForRelease(function (release) { setTimeout(release, 3000); });
 
-// Another simple synchronous action
-sequencer.do(function () { console.log("3rd after waiting for handle for 3 seconds"); });
+sequencer.do(function () { log("3rd after waiting for a release() call"); });
 
-// Create a handle and wait until some asynchronous code releases it
-var blockUntilLaterHandle = new Handle();
+// Block until the handle is released
 sequencer.doWaitForHandle(blockUntilLaterHandle);
 
-// Wait for the promise to be fulfilled.
+sequencer.do(function () { log("4th after waiting for a manually-created handle to be released"); });
+
+// Performs an action and waits until release() is called a certain number of times.
+// The sequencer proceeds after 5 seconds (when two releases have been performed).
+sequencer.doWaitForReleases(2, function (release) {
+  setTimeout(release, 5000);
+  setTimeout(release, 3000);
+});
+
+sequencer.do(function () { log("5th after waiting for two release() calls"); });
+
+// Wait for a promise to be fulfilled.
 // You can optionally obtain the promise's value and/or rejection reason.
 var url = "https://cors-test.appspot.com/test";
 sequencer.doWaitForPromise(fetch(url), function (response) {
-    console.log("Received HTTP " + response.status + " from " + url);
+    log("> Promise Resolved : Received HTTP " + response.status + " from " + url);
 });
 
-// This will run after the external handle is released
-sequencer.do(function () { console.log("5th after waiting for an external handle to be released"); });
-
-// Release the handle sometime later so that the sequence can continue.
-// Note that a long delay is used here because enqueueing tasks in the sequencer
-// is an instantaneous operation; this line runs almost instantly at page load!
-setTimeout(blockUntilLaterHandle.release, 15000);
+sequencer.do(function () { log("6th after waiting for a promise to be resolved"); });
 ```
 
 # Creating an Extension

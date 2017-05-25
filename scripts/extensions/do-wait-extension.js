@@ -1,10 +1,13 @@
 let DoWaitTask = function (duration) {
-  let timeout = null;
+  let that = this;
+
+  this.timeout = null;
+
   this.perform = function (handle) {
-    timeout = setTimeout(handle.release, duration);
+    that.timeout = setTimeout(handle.release, duration);
   };
   this.cancel = function (handle) {
-    if (timeout !== null) clearTimeout(timeout);
+    if (that.timeout !== null) clearTimeout(that.timeout);
     handle.release();
   };
 };

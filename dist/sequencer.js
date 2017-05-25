@@ -110,6 +110,7 @@ module.exports =
 	__webpack_require__(6).extend(Sequencer.prototype);
 	__webpack_require__(7).extend(Sequencer.prototype);
 	__webpack_require__(8).extend(Sequencer.prototype);
+	__webpack_require__(9).extend(Sequencer.prototype);
 	
 	Sequencer.Handle = Handle; // Expose the Handle type in the API
 	
@@ -313,10 +314,16 @@ module.exports =
 	"use strict";
 	
 	var Handle = function Handle(onRelease) {
-	  var self = this;
+	  var that = this;
 	  var onReleaseHandlers = [];
 	
 	  if (!(typeof onRelease === "undefined")) onReleaseHandlers.push(onRelease);
+	
+	  function callReleaseHandlers() {
+	    onReleaseHandlers.forEach(function (handler) {
+	      return handler();
+	    });
+	  }
 	
 	  this.isReleased = false;
 	
@@ -325,11 +332,9 @@ module.exports =
 	  };
 	
 	  this.release = function () {
-	    if (self.isReleased) return;
-	    self.isReleased = true;
-	    onReleaseHandlers.forEach(function (handler) {
-	      handler();
-	    });
+	    if (that.isReleased) return;
+	    that.isReleased = true;
+	    callReleaseHandlers();
 	  };
 	};
 	
@@ -364,12 +369,15 @@ module.exports =
 	"use strict";
 	
 	var DoWaitTask = function DoWaitTask(duration) {
-	  var timeout = null;
+	  var that = this;
+	
+	  this.timeout = null;
+	
 	  this.perform = function (handle) {
-	    timeout = setTimeout(handle.release, duration);
+	    that.timeout = setTimeout(handle.release, duration);
 	  };
 	  this.cancel = function (handle) {
-	    if (timeout !== null) clearTimeout(timeout);
+	    if (that.timeout !== null) clearTimeout(that.timeout);
 	    handle.release();
 	  };
 	};
@@ -453,9 +461,11 @@ module.exports =
 
 	"use strict";
 	
-	var DoWithHandleTask = function DoWithHandleTask(action) {
+	var DoWaitForRelease = function DoWaitForRelease(action) {
 	  this.perform = function (handle) {
-	    action(handle);
+	    // The caller is provided with the release() function directly.
+	    // The use of an handle is an internal implementation detail.
+	    action(handle.release);
 	  };
 	  this.cancel = function (handle) {
 	    handle.release();
@@ -464,12 +474,92 @@ module.exports =
 	
 	module.exports = {
 	  extend: function extend(sequencerPrototype) {
-	    sequencerPrototype.doWithHandle = function (action) {
-	      this.push(new DoWithHandleTask(action));
+	    sequencerPrototype.doWaitForRelease = function (action) {
+	      this.push(new DoWaitForRelease(action));
 	      return this;
 	    };
 	  }
 	};
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var CounterHandle = __webpack_require__(10);
+	
+	var DoWaitForReleases = function DoWaitForReleases(count, action) {
+	  var that = this;
+	
+	  this.counterHandle = new CounterHandle(count);
+	
+	  this.perform = function (handle) {
+	    // When the counter handle is released for the last time, the sequencer handle is released too.
+	    that.counterHandle.addOnReleaseHandler(handle.release);
+	
+	    // The caller is provided with the CounterHandle release() function directly.
+	    // The use of a CounterHandle is an internal implementation detail.
+	    action(that.counterHandle.release);
+	  };
+	  this.cancel = function (handle) {
+	    that.counterHandle.releaseAll();
+	  };
+	};
+	
+	module.exports = {
+	  extend: function extend(sequencerPrototype) {
+	    sequencerPrototype.doWaitForReleases = function (count, action) {
+	      this.push(new DoWaitForReleases(count, action));
+	      return this;
+	    };
+	  }
+	};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	var CounterHandle = function CounterHandle(count, onRelease) {
+	  var that = this;
+	  var onReleaseHandlers = [];
+	
+	  if (count === 0) throw new Error("Count must be greater than zero!");
+	
+	  if (!(typeof onRelease === "undefined")) onReleaseHandlers.push(onRelease);
+	
+	  function callReleaseHandlers() {
+	    onReleaseHandlers.forEach(function (handler) {
+	      return handler();
+	    });
+	  }
+	
+	  this.isReleased = false;
+	  this.releaseCount = 0;
+	
+	  this.addOnReleaseHandler = function (handler) {
+	    onReleaseHandlers.push(handler);
+	  };
+	
+	  this.release = function () {
+	    if (that.isReleased) return;
+	    that.releaseCount += 1;
+	    if (that.releaseCount === count) {
+	      that.isReleased = true;
+	      callReleaseHandlers();
+	    }
+	  };
+	
+	  this.releaseAll = function () {
+	    if (that.isReleased) return;
+	    that.isReleased = true;
+	    callReleaseHandlers();
+	  };
+	};
+	
+	module.exports = CounterHandle;
 
 /***/ })
 /******/ ]);
