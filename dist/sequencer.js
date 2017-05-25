@@ -45,7 +45,17 @@ module.exports =
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(1);
+	let Sequencer = __webpack_require__(1);
+	
+	__webpack_require__(4).extend(Sequencer.prototype);
+	__webpack_require__(5).extend(Sequencer.prototype);
+	__webpack_require__(6).extend(Sequencer.prototype);
+	__webpack_require__(7).extend(Sequencer.prototype);
+	__webpack_require__(8).extend(Sequencer.prototype);
+	__webpack_require__(9).extend(Sequencer.prototype);
+	__webpack_require__(10).extend(Sequencer.prototype);
+	
+	module.exports = Sequencer;
 
 
 /***/ }),
@@ -104,13 +114,6 @@ module.exports =
 	    task.perform(handle);
 	  }
 	};
-	
-	__webpack_require__(4).extend(Sequencer.prototype);
-	__webpack_require__(5).extend(Sequencer.prototype);
-	__webpack_require__(6).extend(Sequencer.prototype);
-	__webpack_require__(7).extend(Sequencer.prototype);
-	__webpack_require__(8).extend(Sequencer.prototype);
-	__webpack_require__(9).extend(Sequencer.prototype);
 	
 	Sequencer.Handle = Handle; // Expose the Handle type in the API
 	
@@ -364,6 +367,38 @@ module.exports =
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var Sequencer = __webpack_require__(1);
+	
+	var DoSequenceTask = function DoSequenceTask(action) {
+	  var that = this;
+	
+	  this.sequencer = new Sequencer();
+	
+	  this.perform = function (handle) {
+	    action(that.sequencer); // Let the caller enqueue his own subtasks
+	    that.sequencer.do(handle.release); // Enqueue a final task to release the sequence task's handle
+	  };
+	  this.cancel = function (handle) {
+	    that.sequencer.clear();
+	    handle.release();
+	  };
+	};
+	
+	module.exports = {
+	  extend: function extend(sequencerPrototype) {
+	    sequencerPrototype.doSequence = function (action) {
+	      this.push(new DoSequenceTask(action));
+	      return this;
+	    };
+	  }
+	};
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -392,7 +427,7 @@ module.exports =
 	};
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -420,7 +455,7 @@ module.exports =
 	};
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -456,12 +491,12 @@ module.exports =
 	};
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 	"use strict";
 	
-	var DoWaitForRelease = function DoWaitForRelease(action) {
+	var DoWaitForReleaseTask = function DoWaitForReleaseTask(action) {
 	  this.perform = function (handle) {
 	    // The caller is provided with the release() function directly.
 	    // The use of an handle is an internal implementation detail.
@@ -475,21 +510,21 @@ module.exports =
 	module.exports = {
 	  extend: function extend(sequencerPrototype) {
 	    sequencerPrototype.doWaitForRelease = function (action) {
-	      this.push(new DoWaitForRelease(action));
+	      this.push(new DoWaitForReleaseTask(action));
 	      return this;
 	    };
 	  }
 	};
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var CounterHandle = __webpack_require__(10);
+	var CounterHandle = __webpack_require__(11);
 	
-	var DoWaitForReleases = function DoWaitForReleases(count, action) {
+	var DoWaitForReleasesTask = function DoWaitForReleasesTask(count, action) {
 	  var that = this;
 	
 	  this.counterHandle = new CounterHandle(count);
@@ -510,14 +545,14 @@ module.exports =
 	module.exports = {
 	  extend: function extend(sequencerPrototype) {
 	    sequencerPrototype.doWaitForReleases = function (count, action) {
-	      this.push(new DoWaitForReleases(count, action));
+	      this.push(new DoWaitForReleasesTask(count, action));
 	      return this;
 	    };
 	  }
 	};
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 	"use strict";
