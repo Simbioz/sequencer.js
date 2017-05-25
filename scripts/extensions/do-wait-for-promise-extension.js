@@ -2,10 +2,10 @@
 
 let DoWaitForPromiseTask = function (promise, onFulfilled, onRejected) {
   this.perform = function (handle) {
-    promise.then(function (value) {
+    promise.then(value => {
       if (typeof (onFulfilled) !== "undefined") onFulfilled(value);
       handle.release();
-    }, function (reason) {
+    }, reason => {
       if (typeof (onRejected) !== "undefined") onRejected(reason);
       handle.release();
     });
