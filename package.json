@@ -18,7 +18,9 @@
     "dist/*",
     "*.md"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "handles.js": "^1.0.1"
+  },
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",

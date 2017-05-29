@@ -64,7 +64,7 @@ module.exports =
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
 	
-	var Handle = __webpack_require__(3);
+	var Handle = __webpack_require__(3).Handle;
 	
 	var Sequencer = function Sequencer() {
 	  var sequence = [];
@@ -114,8 +114,6 @@ module.exports =
 	    task.perform(handle);
 	  }
 	};
-	
-	Sequencer.Handle = Handle; // Expose the Handle type in the API
 	
 	module.exports = Sequencer;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
@@ -314,34 +312,140 @@ module.exports =
 /* 3 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	module.exports =
+	/******/ (function(modules) { // webpackBootstrap
+	/******/ 	// The module cache
+	/******/ 	var installedModules = {};
+	/******/
+	/******/ 	// The require function
+	/******/ 	function __webpack_require__(moduleId) {
+	/******/
+	/******/ 		// Check if module is in cache
+	/******/ 		if(installedModules[moduleId])
+	/******/ 			return installedModules[moduleId].exports;
+	/******/
+	/******/ 		// Create a new module (and put it into the cache)
+	/******/ 		var module = installedModules[moduleId] = {
+	/******/ 			exports: {},
+	/******/ 			id: moduleId,
+	/******/ 			loaded: false
+	/******/ 		};
+	/******/
+	/******/ 		// Execute the module function
+	/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+	/******/
+	/******/ 		// Flag the module as loaded
+	/******/ 		module.loaded = true;
+	/******/
+	/******/ 		// Return the exports of the module
+	/******/ 		return module.exports;
+	/******/ 	}
+	/******/
+	/******/
+	/******/ 	// expose the modules object (__webpack_modules__)
+	/******/ 	__webpack_require__.m = modules;
+	/******/
+	/******/ 	// expose the module cache
+	/******/ 	__webpack_require__.c = installedModules;
+	/******/
+	/******/ 	// __webpack_public_path__
+	/******/ 	__webpack_require__.p = "";
+	/******/
+	/******/ 	// Load entry module and return exports
+	/******/ 	return __webpack_require__(0);
+	/******/ })
+	/************************************************************************/
+	/******/ ([
+	/* 0 */
+	/***/ (function(module, exports, __webpack_require__) {
 	
-	var Handle = function Handle(onRelease) {
-	  var that = this;
-	  var onReleaseHandlers = [];
+		module.exports = {
+		  Handle: __webpack_require__(1),
+		  CounterHandle: __webpack_require__(2)
+		};
 	
-	  if (!(typeof onRelease === "undefined")) onReleaseHandlers.push(onRelease);
 	
-	  function callReleaseHandlers() {
-	    onReleaseHandlers.forEach(function (handler) {
-	      return handler();
-	    });
-	  }
+	/***/ }),
+	/* 1 */
+	/***/ (function(module, exports) {
 	
-	  this.isReleased = false;
+		"use strict";
+		
+		var Handle = function Handle(onRelease) {
+		  var that = this;
+		  var onReleaseHandlers = [];
+		
+		  if (!(typeof onRelease === "undefined")) onReleaseHandlers.push(onRelease);
+		
+		  function callReleaseHandlers() {
+		    onReleaseHandlers.forEach(function (handler) {
+		      return handler();
+		    });
+		  }
+		
+		  this.isReleased = false;
+		
+		  this.addOnReleaseHandler = function (handler) {
+		    onReleaseHandlers.push(handler);
+		  };
+		
+		  this.release = function () {
+		    if (that.isReleased) return;
+		    that.isReleased = true;
+		    callReleaseHandlers();
+		  };
+		};
+		
+		module.exports = Handle;
 	
-	  this.addOnReleaseHandler = function (handler) {
-	    onReleaseHandlers.push(handler);
-	  };
+	/***/ }),
+	/* 2 */
+	/***/ (function(module, exports) {
 	
-	  this.release = function () {
-	    if (that.isReleased) return;
-	    that.isReleased = true;
-	    callReleaseHandlers();
-	  };
-	};
+		"use strict";
+		
+		var CounterHandle = function CounterHandle(count, onRelease) {
+		  var that = this;
+		  var onReleaseHandlers = [];
+		
+		  if (count === 0) throw new Error("Count must be greater than zero!");
+		
+		  if (!(typeof onRelease === "undefined")) onReleaseHandlers.push(onRelease);
+		
+		  function callReleaseHandlers() {
+		    onReleaseHandlers.forEach(function (handler) {
+		      return handler();
+		    });
+		  }
+		
+		  this.isReleased = false;
+		  this.releaseCount = 0;
+		
+		  this.addOnReleaseHandler = function (handler) {
+		    onReleaseHandlers.push(handler);
+		  };
+		
+		  this.release = function () {
+		    if (that.isReleased) return;
+		    that.releaseCount += 1;
+		    if (that.releaseCount === count) {
+		      that.isReleased = true;
+		      callReleaseHandlers();
+		    }
+		  };
+		
+		  this.releaseAll = function () {
+		    if (that.isReleased) return;
+		    that.isReleased = true;
+		    callReleaseHandlers();
+		  };
+		};
+		
+		module.exports = CounterHandle;
 	
-	module.exports = Handle;
+	/***/ })
+	/******/ ]);
+	//# sourceMappingURL=handles.js.map
 
 /***/ }),
 /* 4 */
@@ -409,6 +513,10 @@ module.exports =
 	  this.timeout = null;
 	
 	  this.perform = function (handle) {
+	    if (duration < 0.00001) {
+	      handle.release();
+	      return;
+	    }
 	    that.timeout = setTimeout(handle.release, duration);
 	  };
 	  this.cancel = function (handle) {
@@ -522,7 +630,7 @@ module.exports =
 
 	"use strict";
 	
-	var CounterHandle = __webpack_require__(11);
+	var CounterHandle = __webpack_require__(3).CounterHandle;
 	
 	var DoWaitForReleasesTask = function DoWaitForReleasesTask(count, action) {
 	  var that = this;
@@ -550,51 +658,6 @@ module.exports =
 	    };
 	  }
 	};
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-	"use strict";
-	
-	var CounterHandle = function CounterHandle(count, onRelease) {
-	  var that = this;
-	  var onReleaseHandlers = [];
-	
-	  if (count === 0) throw new Error("Count must be greater than zero!");
-	
-	  if (!(typeof onRelease === "undefined")) onReleaseHandlers.push(onRelease);
-	
-	  function callReleaseHandlers() {
-	    onReleaseHandlers.forEach(function (handler) {
-	      return handler();
-	    });
-	  }
-	
-	  this.isReleased = false;
-	  this.releaseCount = 0;
-	
-	  this.addOnReleaseHandler = function (handler) {
-	    onReleaseHandlers.push(handler);
-	  };
-	
-	  this.release = function () {
-	    if (that.isReleased) return;
-	    that.releaseCount += 1;
-	    if (that.releaseCount === count) {
-	      that.isReleased = true;
-	      callReleaseHandlers();
-	    }
-	  };
-	
-	  this.releaseAll = function () {
-	    if (that.isReleased) return;
-	    that.isReleased = true;
-	    callReleaseHandlers();
-	  };
-	};
-	
-	module.exports = CounterHandle;
 
 /***/ })
 /******/ ]);

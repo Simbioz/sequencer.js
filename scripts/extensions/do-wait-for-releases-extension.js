@@ -1,4 +1,4 @@
-let CounterHandle = require("scripts/counter-handle");
+let CounterHandle = require("handles.js").CounterHandle;
 
 let DoWaitForReleasesTask = function (count, action) {
   let that = this;

@@ -1,4 +1,4 @@
-let Handle = require("./handle");
+let Handle = require("handles.js").Handle;
 
 let Sequencer = function () {
   let sequence = [];
@@ -48,7 +48,5 @@ let Sequencer = function () {
     task.perform(handle);
   }
 };
-
-Sequencer.Handle = Handle; // Expose the Handle type in the API
 
 module.exports = Sequencer;
