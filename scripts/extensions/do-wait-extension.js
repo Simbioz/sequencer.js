@@ -4,6 +4,10 @@ let DoWaitTask = function (duration) {
   this.timeout = null;
 
   this.perform = function (handle) {
+    if (duration < 0.00001) {
+      handle.release();
+      return;
+    }
     that.timeout = setTimeout(handle.release, duration);
   };
   this.cancel = function (handle) {
