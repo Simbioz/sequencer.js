@@ -10,7 +10,7 @@ let config = {
   module: {
     loaders: [
       // Process JS(X) files using Babel
-      { test: /\.js$/, loader: "babel", include: [/scripts/], query: { presets: ["es2015"] } },
+      { test: /\.js$/, loader: "babel", exclude: [/node_modules/], query: { presets: ["es2015"] } },
       // Process JSON files (necessary for client-side NPM dependencies that use json config files)
       { test: /\.json$/, loader: "json" },
     ]

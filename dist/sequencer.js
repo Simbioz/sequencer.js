@@ -45,7 +45,9 @@ module.exports =
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	let Sequencer = __webpack_require__(1);
+	"use strict";
+	
+	var Sequencer = __webpack_require__(1);
 	
 	__webpack_require__(4).extend(Sequencer.prototype);
 	__webpack_require__(5).extend(Sequencer.prototype);
@@ -56,7 +58,6 @@ module.exports =
 	__webpack_require__(10).extend(Sequencer.prototype);
 	
 	module.exports = Sequencer;
-
 
 /***/ }),
 /* 1 */
