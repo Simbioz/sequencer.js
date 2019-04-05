@@ -85,6 +85,10 @@ module.exports =
 	    }
 	  };
 	
+	  this.isEmpty = function () {
+	    return sequence.length === 0;
+	  };
+	
 	  function resumeProcessing() {
 	    if (processing) return;
 	    processing = true;
