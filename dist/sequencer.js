@@ -78,9 +78,12 @@ module.exports =
 	    resumeProcessing();
 	  };
 	
-	  this.clear = function () {
+	  this.clear = function (options) {
+	    options = options || {};
+	    options.cancelCurrentTask = typeof options.cancelCurrentTask === "undefined" ? true : options.cancelCurrentTask;
+	
 	    sequence = [];
-	    if (currentTask !== null && typeof currentTask.cancel !== "undefined") {
+	    if (currentTask !== null && typeof currentTask.cancel !== "undefined" && options.cancelCurrentTask) {
 	      currentTask.cancel(currentHandle);
 	    }
 	  };
